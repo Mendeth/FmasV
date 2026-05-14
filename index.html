@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado Pago Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --black: #1a1a1a;
@@ -25,11 +24,105 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
 }
+
+/* ── STEP INDICATOR ── */
+.step-indicator {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #1a1a1a;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  animation: indicatorIn 0.35s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+.step-indicator.show { display: flex; }
+
+@keyframes indicatorIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes indicatorOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.1); }
+}
+
+.step-indicator.hide { animation: indicatorOut 0.3s ease both; }
+
+.si-num {
+  width: auto; min-width: 80px; height: 64px; border-radius: 18px;
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Arial, sans-serif;
+  font-size: 28px; font-weight: 800;
+  animation: numPop 0.5s cubic-bezier(.34,1.56,.64,1) 0.1s both;
+}
+
+@keyframes numPop {
+  from { transform: scale(0) rotate(-15deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.si-num.black  { background: #ffe600; color: #1a1a1a; box-shadow: 0 0 40px rgba(255,230,0,0.5); }
+.si-num.yellow { background: #ffe600; color: #1a1a1a; box-shadow: 0 0 40px rgba(255,230,0,0.5); }
+
+.si-title {
+  font-family: Arial, sans-serif;
+  font-size: 24px; font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  padding: 0 40px;
+  line-height: 1.3;
+  animation: fadeIn 0.4s ease 0.3s both;
+}
+
+.si-bar {
+  width: 60px; height: 3px;
+  background: #ffe600;
+  border-radius: 100px;
+  animation: barGrow 0.5s ease 0.4s both;
+}
+
+@keyframes barGrow {
+  from { width: 0; opacity: 0; }
+  to   { width: 60px; opacity: 1; }
+}
+
+.si-btn {
+  margin-top: 12px;
+  padding: 14px 44px;
+  background: #ffe600;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 100px;
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(255,230,0,0.45);
+  animation: fadeIn 0.4s ease 0.5s both;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.si-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.si-btn:hover { transform: scale(1.06); box-shadow: 0 6px 32px rgba(255,230,0,0.6); }
+.si-btn:hover::after { transform: translateX(100%); }
 
 /* ── TOPBAR ── */
 .topbar {
@@ -51,8 +144,8 @@ body {
   background: var(--yellow);
   border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif;
-  font-size: 13px; font-weight: 800; color: var(--black);
+  font-family: Arial, sans-serif;
+  font-size: 15px; font-weight: 800; color: var(--black);
   box-shadow: 0 0 12px var(--yellow-glow);
   animation: logoPulse 3s ease-in-out infinite;
 }
@@ -62,8 +155,8 @@ body {
   50%      { box-shadow: 0 0 22px rgba(255,230,0,0.6); }
 }
 
-.topbar-title { color: var(--yellow); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; }
-.topbar-sub   { color: #666; font-size: 11px; }
+.topbar-title { color: var(--yellow); font-family: Arial, sans-serif; font-size: 16px; font-weight: 800; }
+.topbar-sub   { color: #ffffff; font-size: 13px; font-weight: 600; }
 
 .pdots { display: flex; gap: 6px; align-items: center; }
 .pdot {
@@ -77,17 +170,7 @@ body {
 .pdot.done   { background: #4caf50; }
 
 /* ── TITLE BAR ── */
-.titlebar {
-  background: var(--yellow);
-  padding: 9px 20px;
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'Syne', sans-serif;
-  font-size: 14px; font-weight: 800; color: var(--black);
-  border-bottom: 3px solid var(--yellow-dark);
-  position: sticky;
-  top: 60px;
-  z-index: 200;
-}
+
 
 /* ── SLIDES ── */
 .wrap { max-width: 700px; margin: 0 auto; padding: 24px 16px 110px; }
@@ -116,33 +199,39 @@ body {
 /* ── STEP PILL ── */
 .step-pill {
   display: inline-flex; align-items: center; gap: 8px;
-  background: #fff9cc;
-  padding: 5px 14px 5px 5px;
+  background: #ffe600;
+  border: none;
+  padding: 6px 16px 6px 6px;
   border-radius: 100px;
-  font-size: 12px; font-weight: 700;
-  margin-bottom: 14px;
+  font-size: 14px; font-weight: 700;
+  color: #1a1a1a !important;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 12px rgba(255,230,0,0.4);
   animation: fadeIn 0.5s ease 0.1s both;
 }
+.step-pill * { color: #1a1a1a !important; }
+.step-pill .pill-num { background: #1a1a1a !important; color: #ffe600 !important; }
 
 .pill-num {
   width: 24px; height: 24px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800;
+  font-size: 14px; font-weight: 800;
   transition: transform 0.2s;
 }
 .step-pill:hover .pill-num { transform: rotate(10deg) scale(1.1); }
-.pill-black  { background: var(--black); color: white; }
-.pill-yellow { background: var(--yellow); color: var(--black); }
+.pill-black  { background: #ffe600; color: #1a1a1a; }
+.pill-yellow { background: #ffffff; color: #1a1a1a; }
 
 .slide-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 26px; font-weight: 800;
-  line-height: 1.15; margin-bottom: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 26px; font-weight: 700;
+  line-height: 1.2; margin-bottom: 8px;
+  letter-spacing: -0.01em;
   animation: fadeIn 0.5s ease 0.15s both;
 }
 
 .slide-desc {
-  font-size: 14px; color: var(--soft);
+  font-size: 16px; color: var(--soft);
   line-height: 1.65; margin-bottom: 20px;
   animation: fadeIn 0.5s ease 0.2s both;
 }
@@ -178,7 +267,7 @@ body {
 }
 
 .card-title {
-  font-size: 11px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   text-transform: uppercase; letter-spacing: .1em;
   color: var(--muted); margin-bottom: 14px;
 }
@@ -190,7 +279,7 @@ body {
   display: flex; gap: 10px; align-items: flex-start;
   background: #fafafa; border: 1px solid #eee;
   border-radius: 10px; padding: 12px 14px;
-  font-size: 13px; line-height: 1.65; color: #444;
+  font-size: 15px; line-height: 1.65; color: #444;
   transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
 
@@ -204,7 +293,7 @@ body {
   min-width: 22px; height: 22px; border-radius: 6px;
   background: var(--yellow); color: var(--black);
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+  font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
   transition: transform 0.2s;
 }
 .item:hover .item-num { transform: scale(1.15); }
@@ -229,23 +318,33 @@ body {
 }
 .ptable th {
   background: var(--black); color: var(--yellow);
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
   padding: 10px 14px; text-align: left;
 }
 .ptable td {
-  padding: 12px 14px; font-size: 13px;
+  padding: 12px 14px; font-size: 15px;
   color: #444; border-bottom: 1px solid #eee;
   transition: background 0.2s;
 }
 .ptable tr:hover td { background: #fff9cc; }
 .ptable tr:last-child td { border-bottom: none; }
-.price-amount { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--green); }
-.price-note   { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+.price-amount {
+  font-family: Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--black);
+  background: var(--yellow);
+  padding: 2px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  letter-spacing: 0.01em;
+}
+.price-note   { font-size: 13px; color: var(--muted); display: block; margin-top: 2px; }
 
 /* ── CALLOUTS ── */
 .callout {
   border-radius: 12px; padding: 13px 16px;
-  font-size: 13px; line-height: 1.65;
+  font-size: 15px; line-height: 1.65;
   display: flex; gap: 10px; align-items: flex-start;
   margin-bottom: 14px;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -284,8 +383,8 @@ body {
 .ov-num {
   width: 36px; height: 36px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif;
-  font-size: 16px; font-weight: 800; flex-shrink: 0;
+  font-family: Arial, sans-serif;
+  font-size: 18px; font-weight: 800; flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
 }
 .ov-item:hover .ov-num { transform: rotate(-8deg) scale(1.1); }
@@ -293,10 +392,10 @@ body {
 .ov-black  { background: var(--black); color: white; }
 .ov-yellow { background: var(--yellow); color: var(--black); }
 .ov-text { flex: 1; }
-.ov-label { font-size: 13px; font-weight: 700; color: var(--black); }
-.ov-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.ov-label { font-size: 15px; font-weight: 700; color: var(--black); }
+.ov-sub   { font-size: 13px; color: var(--muted); margin-top: 2px; }
 .ov-arrow {
-  color: #ccc; font-size: 20px;
+  color: #ccc; font-size: 22px;
   transition: transform 0.2s, color 0.2s;
 }
 .ov-item:hover .ov-arrow { transform: translateX(4px); color: var(--yellow-dark); }
@@ -320,7 +419,7 @@ body {
 }
 
 .rocket {
-  font-size: 52px; display: block; margin-bottom: 14px;
+  font-size: 54px; display: block; margin-bottom: 14px;
   animation: rocketBounce 2s ease-in-out infinite;
   filter: drop-shadow(0 4px 12px rgba(255,230,0,0.3));
 }
@@ -331,16 +430,16 @@ body {
 }
 
 .welcome-box h2 {
-  font-family: 'Syne', sans-serif;
-  color: white; font-size: 24px; font-weight: 800; margin-bottom: 10px;
+  font-family: Arial, sans-serif;
+  color: white; font-size: 26px; font-weight: 800; margin-bottom: 10px;
 }
-.welcome-box p { color: rgba(255,255,255,.72); font-size: 14px; line-height: 1.65; margin-bottom: 24px; }
+.welcome-box p { color: rgba(255,255,255,.72); font-size: 16px; line-height: 1.65; margin-bottom: 24px; }
 
 .welcome-btn {
   background: var(--yellow); color: var(--black);
   padding: 14px 36px; border-radius: 100px;
-  font-family: 'Syne', sans-serif;
-  font-size: 15px; font-weight: 800; border: none; cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 17px; font-weight: 800; border: none; cursor: pointer;
   box-shadow: 0 4px 20px var(--yellow-glow);
   transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
   position: relative; overflow: hidden;
@@ -363,22 +462,22 @@ body {
   animation: fadeIn 0.5s ease both;
 }
 .final-box .emoji {
-  font-size: 48px; display: block; margin-bottom: 14px;
+  font-size: 50px; display: block; margin-bottom: 14px;
   animation: partyPop 0.6s cubic-bezier(.34,1.56,.64,1) 0.2s both;
 }
 @keyframes partyPop {
   from { transform: scale(0) rotate(-20deg); opacity: 0; }
   to   { transform: scale(1) rotate(0deg); opacity: 1; }
 }
-.final-box h2 { font-family: 'Syne', sans-serif; color: white; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-.final-box p  { color: rgba(255,255,255,.7); font-size: 14px; line-height: 1.6; }
+.final-box h2 { font-family: Arial, sans-serif; color: white; font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.final-box p  { color: rgba(255,255,255,.7); font-size: 16px; line-height: 1.6; }
 
 .checklist { display: flex; flex-direction: column; gap: 9px; }
 .check-item {
   display: flex; align-items: center; gap: 11px;
   background: white; border: 1px solid var(--border);
   border-radius: 12px; padding: 12px 15px;
-  font-size: 13px; color: #444;
+  font-size: 15px; color: #444;
   transition: transform 0.2s, border-color 0.2s, background 0.2s;
   animation: fadeIn 0.4s ease both;
 }
@@ -394,7 +493,7 @@ body {
   width: 26px; height: 26px; border-radius: 50%;
   background: #fff9cc; border: 2px solid var(--yellow);
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800; color: var(--black); flex-shrink: 0;
+  font-size: 14px; font-weight: 800; color: var(--black); flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
 }
 .check-item:hover .check-icon { transform: rotate(10deg) scale(1.15); }
@@ -412,7 +511,7 @@ body {
 }
 
 .nav-label {
-  font-size: 12px; color: var(--muted);
+  font-size: 14px; color: var(--muted);
   flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   font-weight: 500;
 }
@@ -421,8 +520,8 @@ body {
 
 .btn {
   padding: 10px 20px; border-radius: 100px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px; font-weight: 700; border: none; cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 15px; font-weight: 700; border: none; cursor: pointer;
   transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
   position: relative; overflow: hidden;
 }
@@ -436,7 +535,7 @@ body {
 }
 .btn:hover::after { transform: translateX(100%); }
 
-.btn-home  { background: #f0f0f0; color: #444; padding: 10px 13px; font-size: 16px; }
+.btn-home  { background: #f0f0f0; color: #444; padding: 10px 13px; font-size: 18px; }
 .btn-home:hover  { transform: scale(1.12) rotate(-5deg); background: #e8e8e8; }
 
 .btn-back  { background: #f0f0f0; color: #444; border: 1.5px solid #ddd; }
@@ -466,7 +565,6 @@ body {
   <div class="pdots" id="pdots"></div>
 </div>
 
-<div class="titlebar">💳 Mercado Pago Pro</div>
 
 <div class="wrap">
 
@@ -490,7 +588,7 @@ body {
 
 <!-- SLIDE 1 -->
 <div class="slide" id="s1">
-  <div class="step-pill"><div class="pill-num pill-black">1</div>Preparación de la cuenta y presupuesto</div>
+  <div class="step-pill"><div class="pill-num pill-black">1</div>Paso 1 — Preparación de la cuenta y presupuesto</div>
   <div class="slide-title">Antes de empezar, verifica la cuenta</div>
   <div class="slide-desc">La cuenta debe estar validada y con saldo suficiente antes de cualquier configuración.</div>
   <div class="callout c-danger"><span>🚫</span><div><strong>KYC al 100% — requisito obligatorio.</strong><br>El KYC (verificación de identidad) debe estar completamente aprobado. Si no está al 100%, <strong>no será posible cargarle dinero a la cuenta</strong> y el proceso no podrá avanzar.</div></div>
@@ -502,18 +600,18 @@ body {
 
 <!-- SLIDE 2 -->
 <div class="slide" id="s2">
-  <div class="step-pill"><div class="pill-num pill-yellow">2</div>Adhesión al Plan Pro</div>
+  <div class="step-pill"><div class="pill-num pill-yellow">2</div>Paso 2 — Adhesión al Plan Pro</div>
   <div class="slide-title">Activación de la suscripción Pro</div>
   <div class="slide-desc">Con el saldo reflejado en la cuenta, es momento de adherirse al plan.</div>
-  <div class="card"><div class="card-title">🔍 Verificación previa</div><div class="item-list"><div class="item"><div class="item-dot"></div><div>Verifica que en la <strong>esquina superior derecha</strong> del navegador figure la <strong>cuenta del seller correctamente logueada</strong>. Si no lo está, puede arrojar errores.</div></div><div class="item"><div class="item-dot"></div><div>Confirma antes de continuar: cuenta correcta ✓, saldo disponible ✓.</div></div></div></div>
-  <div class="card"><div class="card-title">🔗 Pasos de adhesión</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Envía el <strong>Link de Suscripción</strong> al seller.</div></div><div class="item"><div class="item-num">2</div><div>El seller sigue los pasos para adherirse al plan dentro del link.</div></div><div class="item"><div class="item-num">3</div><div><strong>Nota técnica:</strong> El sistema solo verifica que el dinero esté en la cuenta. Aún no se realiza ningún cobro.</div></div><div class="item"><div class="item-num">4</div><div>Al finalizar, la <strong>misma suscripción redirigirá automáticamente</strong> al seller a la App de Mercado Pago, donde confirmará que la suscripción aparece como <span class="green">activa</span>.</div></div></div></div>
+  <div class="callout c-danger"><span>📅</span><div><strong>Atención: el envío del link de suscripción es válido hasta el día 17/05.</strong> A partir del 18/05 este proceso puede cambiar. Estar atento a las indicaciones del <strong>Doctor Paleo</strong> para conocer el nuevo procedimiento.</div></div>
+  <div class="card"><div class="card-title">🔗 Pasos de adhesión</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Envía el <strong>Link de Suscripción</strong> al seller.</div></div><div class="item"><div class="item-num">2</div><div>Una vez que el seller abra el link, verifica que en la <strong>esquina superior derecha</strong> del navegador figure la <strong>cuenta del seller correctamente logueada</strong>. Si no lo está, puede arrojar errores. Confirma: cuenta correcta ✓, saldo disponible ✓.</div></div><div class="item"><div class="item-num">3</div><div>El seller sigue los pasos para adherirse al plan dentro del link.</div></div><div class="item"><div class="item-num">4</div><div><strong>Nota técnica:</strong> El sistema solo verifica que el dinero esté en la cuenta. Aún no se realiza ningún cobro.</div></div><div class="item"><div class="item-num">5</div><div>Al finalizar, la <strong>misma suscripción redirigirá automáticamente</strong> al seller a la App de Mercado Pago, donde confirmará que la suscripción aparece como <span class="green">activa</span>.</div></div></div></div>
   <div class="callout c-warning"><span>⚠️</span><div><strong>El sistema puede mostrar "120 días gratis".</strong> Esto es un error de programación en proceso de corrección. Este servicio es de pago. No informárselo al cliente como condición real.</div></div>
   <div class="callout c-success"><span>✅</span><div>La app de Mercado Pago es la confirmación oficial. Si la suscripción aparece como activa ahí, el paso fue exitoso.</div></div>
 </div>
 
 <!-- SLIDE 3 -->
 <div class="slide" id="s3">
-  <div class="step-pill"><div class="pill-num pill-black">3</div>Venta de la primera máquina</div>
+  <div class="step-pill"><div class="pill-num pill-black">3</div>Paso 3 — Venta de la primera máquina</div>
   <div class="slide-title">Ejecución de la venta en Fast</div>
   <div class="slide-desc">Este paso se realiza <strong>una sola vez</strong> con <strong>una sola máquina</strong>. Se usa "Pie + Cuotas" únicamente aquí.</div>
   <div class="card"><div class="card-title">⚡ Proceso de venta</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Inicia la venta en Fast hasta llegar a <span class="orange">"Selección de Pago"</span>.</div></div><div class="item"><div class="item-num">2</div><div>Método de Pago: selecciona <span class="orange">"Pie + Cuotas"</span>.</div></div><div class="item"><div class="item-num">3</div><div>Se generará un link de pago. El seller lo paga con el <strong>saldo cargado previamente</strong>.</div></div></div></div>
@@ -523,26 +621,26 @@ body {
 
 <!-- SLIDE 4 -->
 <div class="slide" id="s4">
-  <div class="step-pill"><div class="pill-num pill-yellow">4</div>Configuración de tasas y TPV</div>
+  <div class="step-pill"><div class="pill-num pill-yellow">4</div>Paso 4 — Configuración de tasas y TPV</div>
   <div class="slide-title">Configura el TPV sin setear tasas</div>
   <div class="slide-desc">Este paso tiene una acción crítica que no debe omitirse bajo ningún concepto.</div>
-  <div class="card"><div class="card-title">🖥️ Pasos de configuración</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Tras el pago, el sistema solicitará configurar las tasas.</div></div><div class="item"><div class="item-num">2</div><div>Ingresa el <strong>TPV de la máquina</strong> y presiona continuar.</div></div><div class="item"><div class="item-num">3</div><div>Finaliza la venta.</div></div></div></div>
+  <div class="card"><div class="card-title">🖥️ Pasos de configuración</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Tras el pago, el sistema solicitará configurar las tasas.</div></div><div class="item"><div class="item-num">2</div><div>Ingresa el <strong>TPV del seller</strong>.</div></div><div class="item"><div class="item-num">3</div><div>Finaliza la venta.</div></div></div></div>
   <div class="callout c-danger"><span>🚫</span><div><strong>Acción obligatoria: selecciona "No setear tasas" (dejar desactivadas).</strong><br>Esto es VITAL. Setear tasas manualmente genera problemas técnicos y bloqueos futuros.</div></div>
   <div class="callout c-warning"><span>🕐</span><div><strong>Las tasas se configurarán automáticamente entre las 11 y 12 del día siguiente.</strong> Informa al seller que puede utilizar las máquinas a partir de las 12 del mediodía del día siguiente para contar con las tasas F+V.</div></div>
 </div>
 
 <!-- SLIDE 5 -->
 <div class="slide" id="s5">
-  <div class="step-pill"><div class="pill-num pill-black">5</div>Activación de máquinas adicionales</div>
+  <div class="step-pill"><div class="pill-num pill-black">5</div>Paso 5 — Activación de máquinas adicionales</div>
   <div class="slide-title">Agrega todas las máquinas que necesites</div>
-  <div class="slide-desc">Desde esta activación ya puedes agregar <strong>2, 3, 4, 5 o más máquinas</strong>. Repite los pasos por cada una.</div>
+  <div class="slide-desc">Desde la segunda máquina en adelante — ya sean 3, 4, 5 o más — la venta se realiza de forma normal en Fast. Estas máquinas adicionales se pueden agregar <strong>en conjunto en una misma sesión</strong> o <strong>por separado en distintos momentos</strong>, según lo que necesites.</div>
   <div class="callout c-info"><span>ℹ️</span><div><strong>"Pie + Cuotas"</strong> fue solo para la primera. Todas las adicionales se activan con <strong>"Link de Pago"</strong>.</div></div>
-  <div class="card mt10"><div class="card-title">🔄 Repetir por cada máquina adicional</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Inicia una venta normal en Fast.</div></div><div class="item"><div class="item-num">2</div><div>Selección de Pago: utiliza <strong>"Link de Pago"</strong>.</div></div><div class="item"><div class="item-num">3</div><div>El seller paga los <strong>$59.900</strong> con su saldo disponible.</div></div><div class="item"><div class="item-num">4</div><div>Marca <span class="red">"No setear tasas"</span> al indicar el TPV.</div></div><div class="item"><div class="item-num">5</div><div>Presiona continuar y completa la venta. <strong>Repite desde el paso 1 para cada máquina.</strong></div></div></div></div>
+  <div class="card mt10"><div class="card-title">🔄 Nueva venta por cada máquina adicional</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Inicia una <strong>nueva venta</strong> en Fast.</div></div><div class="item"><div class="item-num">2</div><div>Selección de Pago: utiliza <strong>"Link de Pago"</strong>.</div></div><div class="item"><div class="item-num">3</div><div>El seller paga los <strong>$59.900 o más</strong>, según la cantidad de máquinas adicionales, con su saldo disponible.</div></div><div class="item"><div class="item-num">4</div><div>Marca <span class="red">"No setear tasas"</span> al indicar el TPV.</div></div><div class="item"><div class="item-num">5</div><div>Finaliza la venta.</div></div></div></div>
 </div>
 
 <!-- SLIDE 6 -->
 <div class="slide" id="s6">
-  <div class="step-pill"><div class="pill-num pill-yellow">6</div>Activación con Felipe Paleo</div>
+  <div class="step-pill"><div class="pill-num pill-yellow">6</div>Paso 6 — Activación con Felipe Paleo</div>
   <div class="slide-title">Solicita la activación del F+V</div>
   <div class="slide-desc">Último paso: enviar el Cust_ID del seller a Felipe Paleo para activar el F+V.</div>
   <div class="card"><div class="card-title">📨 Qué hacer</div><div class="item-list"><div class="item"><div class="item-num">1</div><div>Obtén el <strong>Cust_ID</strong> de la cuenta del seller.</div></div><div class="item"><div class="item-num">2</div><div>Envíaselo a <strong>Felipe Paleo</strong> solicitando específicamente la <strong>activación del F+V</strong>.</div></div><div class="item"><div class="item-num">3</div><div>Informa al seller que debe esperar hasta las <strong>12 del mediodía del día siguiente</strong> para comenzar a usar la o las máquinas.</div></div></div></div>
@@ -557,6 +655,14 @@ body {
 </div>
 
 </div><!-- /wrap -->
+
+<!-- STEP INDICATOR -->
+<div class="step-indicator" id="stepIndicator">
+  <div class="si-num" id="siNum">1</div>
+  <div class="si-title" id="siTitle"></div>
+  <div class="si-bar"></div>
+  <button class="si-btn" id="siBtn" onclick="dismissIndicator()">Continuar →</button>
+</div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
@@ -599,15 +705,39 @@ function updateNav() {
   }
 }
 
+var stepNames = ['','Preparación y presupuesto','Adhesión al Plan Pro','Venta primera máquina','Tasas y TPV','Máquinas adicionales','Activación con Felipe Paleo'];
+
+var pendingSlide = -1;
+
+function showIndicator(n, cb) {
+  if (n === 0 || n === 7) { cb(); return; }
+  pendingSlide = n;
+  window._indicatorCb = cb;
+  document.getElementById('siNum').textContent = 'Paso ' + n;
+  document.getElementById('siTitle').textContent = stepNames[n] || '';
+  document.getElementById('stepIndicator').className = 'step-indicator show';
+}
+
+function dismissIndicator() {
+  var ind = document.getElementById('stepIndicator');
+  ind.className = 'step-indicator show hide';
+  setTimeout(function() {
+    ind.className = 'step-indicator';
+    if (window._indicatorCb) { window._indicatorCb(); window._indicatorCb = null; }
+  }, 300);
+}
+
 function goTo(n) {
   var prev = document.getElementById('s' + cur);
   prev.className = 'slide';
   cur = n;
-  var next = document.getElementById('s' + cur);
-  next.className = 'slide active';
   updateDots();
   updateNav();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  showIndicator(n, function() {
+    var next = document.getElementById('s' + cur);
+    next.className = 'slide active';
+  });
 }
 
 function goNext() { goTo(cur + 1 >= TOTAL ? 0 : cur + 1); }
