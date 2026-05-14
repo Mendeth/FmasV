@@ -1,0 +1,2 @@
+# FmasV
+Fijo ams variable 
